@@ -116,6 +116,9 @@ async function getApolloOptions(request: Request, reply: IReply): Promise<{}> {
       const opsFunc: HapiOptionsFunction = <HapiOptionsFunction>options;
       optionsObject = await opsFunc(request);
     } catch (e) {
+      if (e.isBoom) {
+        return reply(e);
+      }
       return reply(createErr(500, `Invalid options provided to ApolloServer: ${e.message}`));
     }
   } else {
